@@ -6,9 +6,9 @@ import PropTypes from 'prop-types'
 
 class MyReads extends Component{
     static propTypes = {
-        books: PropTypes.array.isRequired
+        books: PropTypes.array.isRequired,
+        onShelfChange: PropTypes.func.isRequired
     }    
-
 
     render(){
         const{ books } = this.props

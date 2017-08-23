@@ -1,14 +1,25 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class Book extends Component {
+    static propTypes = {
+        bookId: PropTypes.string.isRequired,
+        coverImage: PropTypes.string.isRequired,
+        shelf: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        authors: PropTypes.array.isRequired
+    }    
+
     render(){
+        const { bookId, coverImage, shelf, title, authors } = this.props
+        
         return(
-            <li key={book.id}>
-                <div className="book">
+            <li key={bookId }>
+                 <div className="book">
                     <div className="book-top">
-                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${coverImage})` }}></div>
                         <div className="book-shelf-changer">
-                            <select value={book.shelf} onChange={(event) => this.updateBook(book.id, event.target.value)}>
+                            <select value={shelf} onChange={(event) => this.updateBook(bookId, event.target.value)}>
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -17,8 +28,8 @@ class Book extends Component {
                             </select>
                         </div>
                     </div>
-                    <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{ book.authors.join(" / ") }</div>
+                    <div className="book-title">{title}</div>
+                    <div className="book-authors">{ authors.join(" / ") }</div>
                 </div>
             </li>
         )

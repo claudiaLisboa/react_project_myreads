@@ -37,32 +37,20 @@ class App extends React.Component {
     }))
   }
 
-  // showBooks(shelf) {
-  //   /**
-  //    * shelf contains one of ["wantToRead", "currentlyReading", "read"].
-  //    */
-  //   return this.state.books
-  //     .filter((book) => book.shelf === shelf)
-  //     .map((book) => 
-  //       (
-          
-  //       )
-  //     )
-  // }
-
   render() {
     return (
             <div className="app">
-              <Route exact path='/' render={() => (
+              {/* <Route exact path='/' render={() => ( */}
                   <MyReads 
-                     books = {this.state.books}
+                     books = { this.state.books }
+                     onShelfChange = { this.updateBook }
                   />
-              )} />
-              <Route path='/search' render={({history}) =>(
+              {/* )} /> */}
+              {/* <Route path='/search' render={({history}) =>(
                   <Search 
                   
                   />
-              )} />
+              )} /> */}
             </div>
        )
   }
