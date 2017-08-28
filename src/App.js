@@ -6,11 +6,18 @@ import Search from './Search'
 import MyReads from './MyReads'
 
 class App extends React.Component {
-  state = {
-    // Books in the bookshelves.
-    books: [ ],
-  }
+  constructor(){
+    super();
 
+    this.updateBook = this.updateBook.bind(this);
+   
+    //get inicial state
+    this.state={
+      // Books in the bookshelves.
+      books: [ ],
+    };
+  }
+    
   componentDidMount() {
     // Fetching all books currently in the bookshelves and saving them in the state.books array.
     BooksAPI.getAll().then(
@@ -40,17 +47,22 @@ class App extends React.Component {
   render() {
     return (
             <div className="app">
-              {/* <Route exact path='/' render={() => ( */}
-                  <MyReads 
-                     books = { this.state.books }
-                     onShelfChange = { this.updateBook }
-                  />
-              {/* )} /> */}
-              {/* <Route path='/search' render={({history}) =>(
-                  <Search 
-                  
-                  />
-              )} /> */}
+              <Route exact path='/' render={() => {
+                  return (
+                    <MyReads 
+                      books={ this.state.books }
+                      updateBook={ this.updateBook }
+                    />
+                  )
+              }} />
+              <Route path='/search' render={({history}) => {
+                  return (
+                    <Search 
+                      books={ this.state.books }
+                      updateBook={ this.updateBook }
+                    />
+                  )
+                }} />
             </div>
        )
   }

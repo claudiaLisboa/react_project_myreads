@@ -7,7 +7,8 @@ class Book extends Component {
         coverImage: PropTypes.string.isRequired,
         shelf: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
-        authors: PropTypes.array.isRequired
+        authors: PropTypes.array.isRequired,
+        updateBook: PropTypes.func.isRequired
     }    
 
     render(){
@@ -19,7 +20,7 @@ class Book extends Component {
                     <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${coverImage})` }}></div>
                         <div className="book-shelf-changer">
-                            <select value={shelf} onChange={(event) => this.updateBook(bookId, event.target.value)}>
+                            <select value={shelf} onChange={(event) => this.props.updateBook(bookId, event.target.value)}>
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>

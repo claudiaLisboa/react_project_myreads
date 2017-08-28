@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import BookShelf from './BookShelf'
 import PropTypes from 'prop-types'
 
@@ -7,8 +8,8 @@ import PropTypes from 'prop-types'
 class MyReads extends Component{
     static propTypes = {
         books: PropTypes.array.isRequired,
-        onShelfChange: PropTypes.func.isRequired
-    }    
+        updateBook: PropTypes.func.isRequired
+    }
 
     render(){
         const{ books } = this.props
@@ -21,22 +22,25 @@ class MyReads extends Component{
                 <div className="list-books-content">
                     <div>
                         <BookShelf
-                           title = "Currently Reading"
-                           books = { books.filter((book) => book.shelf === "currentlyReading") }
+                           title="Currently Reading"
+                           books={ books.filter((book) => book.shelf === "currentlyReading") }
+                           updateBook={ this.props.updateBook }
                         />
                         <BookShelf
-                           title = "Want to Read"
-                           books = { books.filter((book) => book.shelf === "wantToRead") }
+                           title="Want to Read"
+                           books={ books.filter((book) => book.shelf === "wantToRead") }
+                           updateBook={ this.props.updateBook }
                         />
                         <BookShelf
-                           title = "Read"
-                           books = { books.filter((book) => book.shelf === "read") }
+                           title="Read"
+                           books={ books.filter((book) => book.shelf === "read") }
+                           updateBook={ this.props.updateBook }
                         />
                     </div>
                 </div>
                 <div className="open-search">
-                    <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
-                </div>
+                    <Link  to="/search">Add a book</Link>
+                </div>   
             </div>
           )
       }

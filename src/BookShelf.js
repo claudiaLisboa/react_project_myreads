@@ -5,7 +5,8 @@ import PropTypes from 'prop-types'
 class BookShelf extends Component{
     static propTypes = {
         books: PropTypes.array.isRequired,
-        title: PropTypes.string.isRequired
+        title: PropTypes.string.isRequired,
+        updateBook: PropTypes.func.isRequired
     }    
 
     render(){
@@ -19,12 +20,13 @@ class BookShelf extends Component{
                     {
                         books.map((book) => 
                         <Book 
-                          key = { book.id }
-                          bookId = { book.id }
-                          coverImage = { book.imageLinks.thumbnail }
-                          shelf = { book.shelf }
-                          title = { book.title }
-                          authors = { book.authors }
+                          key={ book.id }
+                          bookId={ book.id }
+                          coverImage={ book.imageLinks.thumbnail }
+                          shelf={ book.shelf }
+                          title={ book.title }
+                          authors={ book.authors }
+                          updateBook={ this.props.updateBook }
                         />)
                     }
                     </ol>
