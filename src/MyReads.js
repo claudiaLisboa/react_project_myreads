@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import BookShelf from './BookShelf'
-import PropTypes from 'prop-types'
-
-
 
 class MyReads extends Component{
     static propTypes = {

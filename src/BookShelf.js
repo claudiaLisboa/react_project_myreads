@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Book from './Book'
 import PropTypes from 'prop-types'
+import Book from './Book'
 
 class BookShelf extends Component{
     static propTypes = {
@@ -22,7 +22,7 @@ class BookShelf extends Component{
                         <Book 
                           key={ book.id }
                           bookId={ book.id }
-                          coverImage={ book.imageLinks.thumbnail }
+                          coverImage={ (!book.imageLinks || !book.imageLinks.thumbnail) ? '' : book.imageLinks.thumbnail }
                           shelf={ book.shelf }
                           title={ book.title }
                           authors={ book.authors }

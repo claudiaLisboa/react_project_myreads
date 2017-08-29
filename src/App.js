@@ -31,6 +31,14 @@ class App extends React.Component {
     // The [0] at the end retrieves the actual book inside the array.
     let book = this.state.books.filter((book) => book.id === bookId)[0]
 
+    // If the statement above retrieved no book,
+    // it means that bookId represents a book that does not
+    // exist in any shelf yet, that is, it is a book updated directly in the Search page.
+    if (!book) {
+      // Creating an empty book with just the id.
+      book = { id: bookId }
+    }
+
     // Passing the book to BooksAPI.update in order to update its shelf in the backend.
     BooksAPI.update(book, shelf)
       .then(console.log("Called BooksAPI.update", bookId, shelf))
@@ -58,7 +66,7 @@ class App extends React.Component {
               <Route path='/search' render={({history}) => {
                   return (
                     <Search 
-                      books={ this.state.books }
+                      booksInShelf={ this.state.books }
                       updateBook={ this.updateBook }
                     />
                   )

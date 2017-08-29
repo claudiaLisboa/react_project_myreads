@@ -6,7 +6,7 @@ import Book from './Book'
 
 class Search extends Component {
     static propTypes = {
-        books: PropTypes.array.isRequired,
+        booksInShelf: PropTypes.array.isRequired,
         updateBook: PropTypes.func.isRequired
     }
 
@@ -16,19 +16,27 @@ class Search extends Component {
     }
 
     updateQuery = (searchQuery) => {
-        BooksAPI.search(searchQuery, 50).then((response) => {
-            if(!response.error) {
-                this.setState({
-                    availableBooks: response,
-                    query: searchQuery
-                })
-            } else {
-                this.setState({
-                    query: searchQuery
-                })
-            }
-            console.log(response)
-        })
+        // If searchQuery is an empty string, simply clear availableBooks.
+        if (searchQuery === '') {
+            this.setState({
+                availableBooks: [],
+                query: searchQuery
+            })
+        } else {
+            BooksAPI.search(searchQuery, 50).then((response) => {
+                console.log(response)
+                if(!response.error) {
+                    this.setState({
+                        availableBooks: response,
+                        query: searchQuery
+                    })
+                } else {
+                    this.setState({
+                        query: searchQuery
+                    })
+                }
+            })
+        }
     }
    
     clearQuery = () => {
@@ -37,46 +45,52 @@ class Search extends Component {
    
     render() {
         return (
-          <div className="search-books">
-            <div className="search-books-bar">
-                <div className="close-search">
-                    <Link  to="/">Back</Link>
-                </div>
-                <div className="search-books-input-wrapper">
-                    {/*
-                    NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                    You can find these search terms here:
-                    https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                    However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                    you don't find a specific author or title. Every search is limited by search terms.
-                    */}
-                    <input
-                        type='text'
-                        placeholder='Search by title or author'
-                        value={this.state.query}
-                        onChange={(event) => this.updateQuery(event.target.value)}
-                    />
-                </div>
-            </div>
-            <div className="search-books-results">
-                <ol className="books-grid">
-                {
-                    this.state.availableBooks.map((book) => 
-                        <Book 
-                            key={ book.id }
-                            bookId={ book.id }
-                            coverImage={ book.imageLinks.thumbnail }
-                            shelf={ book.shelf }
-                            title={ book.title }
-                            authors={ book.authors }
-                            updateBook={ this.props.updateBook }
+            <div className="search-books">
+                <div className="search-books-bar">
+                    <Link to="/" className="close-search">Close</Link>
+                    <div className="search-books-input-wrapper">
+                        <input
+                            type='text'
+                            placeholder='Search by title or author'
+                            value={this.state.query}
+                            onChange={(event) => this.updateQuery(event.target.value)}
                         />
-                    )
-                }
-            </ol>
+                    </div>
+                </div>
+                <div className="search-books-results">
+                    <ol className="books-grid">
+                    {
+                        this.state.availableBooks.map((book) =>
+                        {
+                            // Checking whether the book being displayed is already in a shelf.
+                            let bookInShelf = this.props.booksInShelf.filter((bookInShelf) => bookInShelf.id === book.id)
+
+                            let shelf
+                            if (bookInShelf.length > 0) {
+                                // If bookInShelf contains a book it means that
+                                // the book being displayed is already in a shelf.
+                                // So its shelf must be changed accordingly.
+                                shelf = bookInShelf[0].shelf
+                            } else {
+                                shelf = 'none'
+                            }
+
+                            return (
+                                <Book 
+                                    key={ book.id }
+                                    bookId={ book.id }
+                                    coverImage={ (!book.imageLinks || !book.imageLinks.thumbnail) ? '' : book.imageLinks.thumbnail }
+                                    shelf={ shelf }
+                                    title={ !book.title ? '': book.title }
+                                    authors={ !book.authors ? [] : book.authors }
+                                    updateBook={ this.props.updateBook }
+                                />
+                            )
+                        })
+                    }
+                    </ol>
+                </div>
             </div>
-          </div>
         )
     }
 }
