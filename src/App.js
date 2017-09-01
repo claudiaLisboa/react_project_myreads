@@ -17,8 +17,12 @@ class App extends React.Component {
       books: [ ],
     };
   }
-    
+
   componentDidMount() {
+    this.loadBooks()
+  }
+    
+  loadBooks() {
     // Fetching all books currently in the bookshelves and saving them in the state.books array.
     BooksAPI.getAll().then(
       (result) => {this.setState({ books: result })}
@@ -43,13 +47,7 @@ class App extends React.Component {
     BooksAPI.update(book, shelf)
       .then(console.log("Called BooksAPI.update", bookId, shelf))
 
-    // Updating the book's shelf.
-    book.shelf = shelf
-
-    // Updating the book in this.state.books by filtering it out and adding it back in.
-    this.setState(state => ({
-      books: this.state.books.filter((book) => book.id !== bookId).concat(book)
-    }))
+    this.loadBooks()
   }
 
   render() {

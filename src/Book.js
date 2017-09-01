@@ -31,6 +31,7 @@ class Book extends Component {
                     </div>
                     <div className="book-title">{title}</div>
                     <div className="book-authors">{ authors.join(" / ") }</div>
+
                 </div>
             </li>
         )
