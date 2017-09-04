@@ -16,6 +16,12 @@ class Search extends Component {
     }
 
     updateQuery = (searchQuery) => {
+        // As recommended in the Code Review, updating the query state here, before any seach request.
+        // This will allow the input field to keep synced with what the user types.
+        this.setState({
+            query: searchQuery
+        })
+
         // If searchQuery is an empty string, simply clear availableBooks.
         if (searchQuery === '') {
             this.setState({
@@ -28,7 +34,6 @@ class Search extends Component {
                 if(!response.error) {
                     this.setState({
                         availableBooks: response,
-                        query: searchQuery
                     })
                 } else {
                     this.setState({
@@ -63,26 +68,19 @@ class Search extends Component {
                         this.state.availableBooks.map((book) =>
                         {
                             // Checking whether the book being displayed is already in a shelf.
-                            let bookInShelf = this.props.booksInShelf.filter((bookInShelf) => bookInShelf.id === book.id)
-
-                            let shelf
-                            if (bookInShelf.length > 0) {
-                                // If bookInShelf contains a book it means that
-                                // the book being displayed is already in a shelf.
-                                // So its shelf must be changed accordingly.
-                                shelf = bookInShelf[0].shelf
-                            } else {
-                                shelf = 'none'
-                            }
+                            const bookInShelf = this.props.booksInShelf.find((bookInShelf) => bookInShelf.id === book.id)
+                            // If bookInShelf is really a book it means that
+                            // the book being displayed is already in a shelf.
+                            // So its shelf must be changed accordingly.
+                            // Otherwise its shelf will be 'none'.
+                            const shelf = !!bookInShelf ? bookInShelf.shelf : 'none';
+                            book.shelf = shelf
 
                             return (
                                 <Book 
                                     key={ book.id }
                                     bookId={ book.id }
-                                    coverImage={ (!book.imageLinks || !book.imageLinks.thumbnail) ? '' : book.imageLinks.thumbnail }
-                                    shelf={ shelf }
-                                    title={ !book.title ? '': book.title }
-                                    authors={ !book.authors ? [] : book.authors }
+                                    book={ book }
                                     updateBook={ this.props.updateBook }
                                 />
                             )

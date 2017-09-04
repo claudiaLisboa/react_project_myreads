@@ -8,8 +8,6 @@ import MyReads from './MyReads'
 class App extends React.Component {
   constructor(){
     super();
-
-    this.updateBook = this.updateBook.bind(this);
    
     //get inicial state
     this.state={
@@ -29,25 +27,17 @@ class App extends React.Component {
     )
   }
 
-  updateBook(bookId, shelf) {
-    // Retrieving the book from this.state.books by the id.
-    // The filter method returns an array.
-    // The [0] at the end retrieves the actual book inside the array.
-    let book = this.state.books.filter((book) => book.id === bookId)[0]
+  // Declaring updateBook as an arrow function as suggested in the Code Review.
+  updateBook = (book, shelf) => {
+    book.shelf = shelf
 
-    // If the statement above retrieved no book,
-    // it means that bookId represents a book that does not
-    // exist in any shelf yet, that is, it is a book updated directly in the Search page.
-    if (!book) {
-      // Creating an empty book with just the id.
-      book = { id: bookId }
-    }
-
-    // Passing the book to BooksAPI.update in order to update its shelf in the backend.
     BooksAPI.update(book, shelf)
-      .then(console.log("Called BooksAPI.update", bookId, shelf))
-
-    this.loadBooks()
+      .then((response) => {
+        const books = this.state.books.filter(v => v.id !== book.id).concat([book]);
+        this.setState({
+          books
+        });
+      });
   }
 
   render() {
